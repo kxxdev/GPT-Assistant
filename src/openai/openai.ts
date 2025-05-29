@@ -3,11 +3,13 @@ import OpenAI from 'openai';
 import { ChatCompletionMessageParam } from 'openai/resources/index';
 import { stripDisallowedHtmlTags } from '../utils/stripDisallowedHtmlTags';
 
-const proxyAgent = new HttpsProxyAgent(process.env.PROXY || '');
+const proxy = process.env.PROXY;
+
+const proxyAgent = proxy ? new HttpsProxyAgent(proxy) : undefined;
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || '',
-  httpAgent: proxyAgent,
+  ...(proxyAgent && { httpAgent: proxyAgent }),
 });
 
 export async function gptText(
