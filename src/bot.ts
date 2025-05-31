@@ -5,6 +5,9 @@ import { startComposer } from './commands/start';
 import { roleComposer } from './commands/role';
 import { messageHandler } from './handlers/message';
 import { clearHistoryComposer } from './commands/clearhistory';
+import checkAccess from './middlewares/checkAccess';
+import { addAccess } from './commands/addaccess';
+import checkAdminAccess from './middlewares/checkAdminAccess';
 
 if (!process.env.TELEGRAM_TOKEN) {
   throw new Error('TELEGRAM_TOKEN is not defined in environment variables');
@@ -39,10 +42,14 @@ bot.api.setMyCommands([
   },
 ]);
 
+bot.use(checkAccess);
+
 bot.use(startComposer);
 bot.use(roleComposer);
 bot.use(clearHistoryComposer);
 bot.use(messageHandler);
+
+bot.use(checkAdminAccess, addAccess);
 
 bot.catch((err) => {
   const ctx = err.ctx;
