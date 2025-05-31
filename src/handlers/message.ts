@@ -11,8 +11,10 @@ messageHandler.on('message', async (ctx: Context) => {
   const tg_id = String(ctx.from?.id);
   const userMessage = ctx.message?.text;
 
-  if (!tg_id || !userMessage || (tg_id != '600190229' && tg_id != '6370215176'))
-    return;
+  if (!userMessage)
+    return await ctx.reply(
+      'Для обращения ко мне отправляйте запросы с текстом.'
+    );
 
   createUser(tg_id);
 
