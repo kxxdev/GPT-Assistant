@@ -1,7 +1,6 @@
 import { Composer } from 'grammy';
 import { CustomContext } from '../types/CustomContext';
 import { createUser, giveUserAccess } from '../database/userService';
-import checkAdminAccess from '../middlewares/checkAdminAccess';
 
 const addAccess = new Composer<CustomContext>();
 
