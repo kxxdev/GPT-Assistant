@@ -5,12 +5,13 @@ import { Roles } from '../types/types';
 const db = new Database(path.resolve(__dirname, 'database.db'));
 
 try {
-  db.exec(`ALTER TABLE users ADD COLUMN is_approved INTEGER DEFAULT 0`);
+  db.exec(`ALTER TABLE users ADD COLUMN is_approved BOOLEAN DEFAULT 0`);
 } catch (e) {}
 
 db.exec(`
 	CREATE TABLE IF NOT EXISTS users (
 		tg_id TEXT PRIMARY KEY,
+		is_approved BOOLEAN DEFAULT 0,
 		total_tokens INTEGER DEFAULT 0,
 		gpt_role TEXT DEFAULT '${Roles.Default}',
 		created_at TEXT DEFAULT CURRENT_TIMESTAMP,
