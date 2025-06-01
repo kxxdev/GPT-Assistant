@@ -54,23 +54,3 @@ export function getGPTRole(tg_id: string): Roles {
 
   return (row?.gpt_role ?? Roles.Default) as Roles;
 }
-
-export function giveUserAccess(tg_id: string): void {
-  db.prepare(
-    `
-    UPDATE users SET is_approved = 1
-    WHERE tg_id = ?
-    `
-  ).run(tg_id);
-}
-
-export function checkApproved(tg_id: string): boolean {
-  const row = db
-    .prepare(
-      `SELECT is_approved FROM users
-    WHERE tg_id = ?`
-    )
-    .get(tg_id) as { is_approved: boolean };
-
-  return row.is_approved;
-}
