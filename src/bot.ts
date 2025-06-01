@@ -5,6 +5,10 @@ import { startComposer } from './commands/start';
 import { roleComposer } from './commands/role';
 import { messageHandler } from './handlers/message';
 import { clearHistoryComposer } from './commands/clearhistory';
+import { setMyCommands } from './commands/init';
+import checkAccess from './middlewares/checkUserAccess';
+import checkAdminAccess from './middlewares/checkAdminAccess';
+import { addAccess } from './commands/addaccess';
 
 if (!process.env.TELEGRAM_TOKEN) {
   throw new Error('TELEGRAM_TOKEN is not defined in environment variables');
@@ -12,37 +16,16 @@ if (!process.env.TELEGRAM_TOKEN) {
 
 const bot = new Bot<CustomContext>(process.env.TELEGRAM_TOKEN);
 
-bot.api.setMyCommands([
-  {
-    command: 'start',
-    description: 'Перезапуск бота',
-  },
-  {
-    command: 'clearhistory',
-    description: 'Очистить историю сообщений текущей роли',
-  },
-  {
-    command: 'assistant',
-    description: 'Роль ассистента',
-  },
-  {
-    command: 'therapist',
-    description: 'Роль психотерапевта',
-  },
-  {
-    command: 'coach',
-    description: 'Роль наставника',
-  },
-  {
-    command: 'planner',
-    description: 'Роль планировщика',
-  },
-]);
+setMyCommands(bot);
+
+bot.use(checkAccess);
 
 bot.use(startComposer);
 bot.use(roleComposer);
 bot.use(clearHistoryComposer);
 bot.use(messageHandler);
+
+bot.use(checkAdminAccess, addAccess);
 
 bot.catch((err) => {
   const ctx = err.ctx;
