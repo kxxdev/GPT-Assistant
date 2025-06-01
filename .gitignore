@@ -5,5 +5,3 @@ node_modules/
 coverage/
 dist/
 .vscode
-.package-lock
-database.db

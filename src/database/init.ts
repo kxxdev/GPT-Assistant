@@ -7,7 +7,6 @@ const db = new Database(path.resolve(__dirname, 'database.db'));
 db.exec(`
 	CREATE TABLE IF NOT EXISTS users (
 		tg_id TEXT PRIMARY KEY,
-		is_approved BOOLEAN DEFAULT 0,
 		total_tokens INTEGER DEFAULT 0,
 		gpt_role TEXT DEFAULT '${Roles.Default}',
 		created_at TEXT DEFAULT CURRENT_TIMESTAMP,
